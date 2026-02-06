@@ -175,7 +175,10 @@ class provider implements
                     "manualenrolid" => (int)$map->manualenrolid,
                     "roleid" => (int)$map->roleid,
                     "groups" => $groups,
-                    "hiddenprefname" => $map->hiddenprefset ? ("block_myoverview_hidden_course_" . (int)$instance->childcourseid) : null,
+                    "hiddenprefname" =>
+                        $map->hiddenprefset ?
+                        ("block_myoverview_hidden_course_" . (int)$instance->childcourseid) :
+                        null,
                     "hiddenprefvalue" => $pref,
                     "timeenrolled" => (int)$map->timeenrolled,
                     "timemodified" => (int)$map->timemodified,
