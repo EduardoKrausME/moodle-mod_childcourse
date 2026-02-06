@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/childcourse/db" VERSION="2026020501" COMMENT="childcourse tables"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+
+    <TABLES>
+
+        <TABLE NAME="childcourse" COMMENT="Child course activity instances">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+                <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+
+                <FIELD NAME="childcourseid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+
+                <FIELD NAME="opennewtab" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+
+                <FIELD NAME="autoenrol" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+                <FIELD NAME="targetgroupid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="inheritgroups" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="keeprole" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+                <FIELD NAME="unenrolaction" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="unenrol" SEQUENCE="false"/>
+                <FIELD NAME="hideinmycourses" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+
+                <FIELD NAME="completionrule" TYPE="char" LENGTH="40" NOTNULL="true" DEFAULT="coursecompleted"
+                       SEQUENCE="false"/>
+                <FIELD NAME="completioncmid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+
+                <FIELD NAME="lastsyncgrade" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="lastsynccompletion" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+
+                <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+            </FIELDS>
+
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+
+            <INDEXES>
+                <INDEX NAME="idx_childcourse_course" UNIQUE="false" FIELDS="course"/>
+                <INDEX NAME="idx_childcourse_child" UNIQUE="false" FIELDS="childcourseid"/>
+                <INDEX NAME="idx_childcourse_lastsync" UNIQUE="false" FIELDS="lastsyncgrade,lastsynccompletion"/>
+                <INDEX NAME="idx_childcourse_rule_cmid" UNIQUE="false" FIELDS="completionrule,completioncmid"/>
+            </INDEXES>
+        </TABLE>
+
+        <TABLE NAME="childcourse_map" COMMENT="Tracks enrolments created by a link instance">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="childcourseinstanceid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="parentcourseid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="childcourseid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+
+                <FIELD NAME="manualenrolid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="roleid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="groupidsjson" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+
+                <FIELD NAME="hiddenprefset" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+
+                <FIELD NAME="timeenrolled" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+            </FIELDS>
+
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+
+            <INDEXES>
+                <INDEX NAME="uix_childcourse_map_instance_user" UNIQUE="true" FIELDS="childcourseinstanceid,userid"/>
+                <INDEX NAME="idx_childcourse_map_child_user" UNIQUE="false" FIELDS="childcourseid,userid"/>
+                <INDEX NAME="idx_childcourse_map_manualenrol" UNIQUE="false" FIELDS="manualenrolid"/>
+            </INDEXES>
+        </TABLE>
+
+        <TABLE NAME="childcourse_state" COMMENT="Cached state per link instance and user for incremental sync">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="childcourseinstanceid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+
+                <FIELD NAME="finalgrade" TYPE="number" LENGTH="10" DECIMALS="5" NOTNULL="false" SEQUENCE="false"/>
+                <FIELD NAME="gradeitemtimemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="grade_source" TYPE="char" LENGTH="30" NOTNULL="true" DEFAULT="course_total"
+                       SEQUENCE="false"/>
+
+                <FIELD NAME="coursecompleted" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+                <FIELD NAME="coursecompletiontimemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"
+                       SEQUENCE="false"/>
+
+                <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+            </FIELDS>
+
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+
+            <INDEXES>
+                <INDEX NAME="uix_childcourse_state_instance_user" UNIQUE="true" FIELDS="childcourseinstanceid,userid"/>
+                <INDEX NAME="idx_childcourse_state_grade_time" UNIQUE="false"
+                       FIELDS="childcourseinstanceid,gradeitemtimemodified"/>
+                <INDEX NAME="idx_childcourse_state_comp_time" UNIQUE="false"
+                       FIELDS="childcourseinstanceid,coursecompletiontimemodified"/>
+            </INDEXES>
+        </TABLE>
+
+    </TABLES>
+</XMLDB>

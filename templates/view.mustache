@@ -1,0 +1,87 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_childcourse/view
+
+    Example context (json):
+    {
+        "name": "Child course access",
+        "intro": "<p>This activity links you to the child course and can sync grades and completion.</p>",
+        "open_url": "https://moodle.example.com/course/view.php?id=123",
+        "open_new_tab": true,
+        "can_sync": true,
+        "sync_url": "https://moodle.example.com/mod/childcourse/sync.php?id=45&sesskey=abc123",
+        "childcourse_name": "Math 101 (Child course)",
+        "childcourse_id": 123,
+        "lastsync_grade": "2026-02-05 14:22",
+        "lastsync_completion": "2026-02-05 14:22",
+        "grade_ok": false,
+        "grade_warning": "Grades are not synced yet. Click “Sync now” to update.",
+        "completion_ok": true,
+        "completion_warning": ""
+    }
+}}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h3 class="mb-2">{{name}}</h3>
+
+                    {{#intro}}
+                        <div class="mb-3">
+                            {{{intro}}}
+                        </div>
+                    {{/intro}}
+
+                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                        <a class="btn btn-primary"
+                           href="{{{open_url}}}"
+                           {{#open_new_tab}}target="_blank" rel="noopener"{{/open_new_tab}}>
+                            {{#str}}openchildcourse, childcourse{{/str}}
+                        </a>
+
+                        {{#can_sync}}
+                            <a class="btn btn-outline-secondary" href="{{sync_url}}">
+                                {{#str}}syncnow, childcourse{{/str}}
+                            </a>
+                        {{/can_sync}}
+                    </div>
+
+                    <div class="mt-3 small text-muted">
+                        <div><strong>{{#str}}label_childcourse, childcourse{{/str}}:</strong> {{childcourse_name}} (ID: {{childcourse_id}})</div>
+                        <div><strong>{{#str}}label_lastsyncgrade, childcourse{{/str}}:</strong> {{lastsync_grade}}</div>
+                        <div><strong>{{#str}}label_lastsynccompletion, childcourse{{/str}}:</strong> {{lastsync_completion}}</div>
+                    </div>
+
+                    {{^grade_ok}}
+                        <div class="alert alert-warning mt-3 mb-0">
+                            {{grade_warning}}
+                        </div>
+                    {{/grade_ok}}
+
+                    {{^completion_ok}}
+                        <div class="alert alert-warning mt-3 mb-0">
+                            {{completion_warning}}
+                        </div>
+                    {{/completion_ok}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
