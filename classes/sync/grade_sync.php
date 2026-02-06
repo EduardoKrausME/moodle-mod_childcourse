@@ -73,7 +73,7 @@ class grade_sync {
              WHERE gg.itemid       = ?
                AND gg.timemodified > ?
           ORDER BY gg.timemodified ASC";
-        $changed = $DB->get_records_sql($sql, [$courseitem->id, $since]        );
+        $changed = $DB->get_records_sql($sql, [$courseitem->id, $since]);
 
         if (!$changed) {
             $instance->lastsyncgrade = $now;
@@ -141,8 +141,7 @@ class grade_sync {
         ]);
 
         if (!$state) {
-            $DB->insert_record(
-                "childcourse_state", (object) [
+            $params = (object) [
                 "childcourseinstanceid" => $instanceid,
                 "userid" => $userid,
                 "finalgrade" => $percent,
@@ -151,8 +150,8 @@ class grade_sync {
                 "coursecompleted" => 0,
                 "coursecompletiontimemodified" => 0,
                 "timemodified" => time(),
-            ]
-            );
+            ];
+            $DB->insert_record("childcourse_state", $params);
             return;
         }
 
