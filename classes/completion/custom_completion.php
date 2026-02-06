@@ -74,7 +74,12 @@ class custom_completion extends activity_custom_completion {
      * @return string[]
      */
     public function get_sort_order(): array {
-        return ["completionrule"];
+        return [
+            'completionview',
+            'completionusegrade',
+            'completionpassgrade',
+            "completionrule",
+        ];
     }
 
     /**
