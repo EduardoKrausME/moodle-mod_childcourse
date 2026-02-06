@@ -401,8 +401,7 @@ class completion_sync {
         ]);
 
         if (!$state) {
-            $DB->insert_record(
-                "childcourse_state", (object) [
+            $params = (object) [
                 "childcourseinstanceid" => $instanceid,
                 "userid" => $userid,
                 "finalgrade" => null,
@@ -411,8 +410,8 @@ class completion_sync {
                 "coursecompleted" => $completed,
                 "coursecompletiontimemodified" => $timemodified,
                 "timemodified" => time(),
-            ]
-            );
+            ];
+            $DB->insert_record("childcourse_state", $params);
             return;
         }
 
