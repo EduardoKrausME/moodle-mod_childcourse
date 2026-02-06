@@ -108,7 +108,7 @@ class custom_completion extends activity_custom_completion {
                 : COMPLETION_INCOMPLETE;
         }
 
-        // Default: "coursecompleted".
+        // Default coursecompleted.
         return $this->is_course_completed($childcourseid, $this->userid)
             ? COMPLETION_COMPLETE
             : COMPLETION_INCOMPLETE;
