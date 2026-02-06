@@ -83,7 +83,7 @@ class mobile {
 
         $courseurl = new moodle_url("/course/view.php", ["id" => $instance->childcourseid]);
 
-        $data = ["open_course_url" => $courseurl,];
+        $data = ["open_course_url" => $courseurl];
 
         return [
             "templates" => [
