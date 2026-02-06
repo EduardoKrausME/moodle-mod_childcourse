@@ -354,8 +354,7 @@ class enrol_manager {
             return;
         }
 
-        $DB->insert_record(
-            "childcourse_state", (object) [
+        $params = (object) [
             "childcourseinstanceid" => $instanceid,
             "userid" => $userid,
             "finalgrade" => null,
@@ -364,7 +363,7 @@ class enrol_manager {
             "coursecompleted" => 0,
             "coursecompletiontimemodified" => 0,
             "timemodified" => time(),
-        ]
-        );
+        ];
+        $DB->insert_record("childcourse_state", $params);
     }
 }
