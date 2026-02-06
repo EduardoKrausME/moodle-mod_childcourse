@@ -15,8 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * phpcs:disable moodle.Files.MoodleInternal.MoodleInternalGlobalState
- *
  * course_details.php
  *
  * @package   mod_childcourse
@@ -39,6 +37,7 @@ use mod_childcourse\sync\grade_sync;
 use moodle_exception;
 use required_capability_exception;
 
+// phpcs:disable moodle.Files.MoodleInternal.MoodleInternalGlobalState
 require_once("{$CFG->libdir}/externallib.php");
 
 /**

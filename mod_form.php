@@ -15,7 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * phpcs:disable moodle.Files.MoodleInternal.MoodleInternalGlobalState
  * mod_form.php
  *
  * @package   mod_childcourse
@@ -25,6 +24,7 @@
 
 use mod_childcourse\instance\record_mapper;
 
+// phpcs:disable moodle.Files.MoodleInternal.MoodleInternalGlobalState
 require_once("{$CFG->dirroot}/course/moodleform_mod.php");
 
 /**
