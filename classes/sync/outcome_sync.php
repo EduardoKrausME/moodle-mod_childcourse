@@ -69,7 +69,7 @@ class outcome_sync {
                 continue;
             }
 
-            // grade_update_outcomes expects: [itemnumber => outcomegrade]
+            // The grade_update_outcomes expects: [itemnumber => outcomegrade].
             $data[(int)$item->itemnumber] = $mapped;
         }
 
