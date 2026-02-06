@@ -1,6 +1,6 @@
 # mod_childcourse (Child course)
 
-**mod_childcourse** adds a Moodle activity of type **“Child course”**: when clicked, the student is redirected to **another course** (the “child course”) and, optionally, the plugin performs **automatic enrolment** in the child course and keeps **incremental synchronization** of **grades** and **completion**.
+ **mod_childcourse** adds a Moodle activity of type **"Child course"**: when clicked, the student is redirected to **another course** (the "child course") and, optionally, the plugin performs **automatic enrolment** in the child course and keeps **incremental synchronization** of **grades** and **completion**.
 
 ## Main features
 
@@ -16,7 +16,7 @@
 
   * **Unenrol** users who were enrolled via the link, or
   * **Keep** the enrolments (configurable).
-* **Hide from “My courses / Overview”** (optional) to reduce visual clutter.
+* **Hide from "My courses / Overview"** (optional) to reduce visual clutter.
 * **Manual sync action** (when the user has permission).
 * **Backup/Restore** supported.
 * **Moodle App (mobile) support**: renders a simple screen with a button to open the child course.
