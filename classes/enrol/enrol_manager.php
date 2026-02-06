@@ -318,13 +318,12 @@ class enrol_manager {
             if ($existing) {
                 $childgroupid = $existing->id;
             } else {
-                $childgroupid = $DB->insert_record(
-                    "groups", (object) [
+                $params = (object) [
                     "courseid" => $childcourseid,
                     "name" => $g->name,
                     "timecreated" => time(),
-                ]
-                );
+                ];
+                $childgroupid = $DB->insert_record("groups", $params);
             }
 
             groups_add_member($childgroupid, $userid);
