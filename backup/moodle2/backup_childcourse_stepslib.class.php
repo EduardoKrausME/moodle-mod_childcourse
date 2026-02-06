@@ -61,7 +61,7 @@ class backup_childcourse_activity_structure_step extends backup_activity_structu
 
         // Notes:
         // - We intentionally do NOT backup childcourse_map/childcourse_state.
-        //   Those are volatile caches/mappings that can be rebuilt after restore.
+        // - Those are volatile caches/mappings that can be rebuilt after restore.
         // - childcourseid is a cross-course reference; restore will keep it only if it exists in target site.
         // - completioncmid also references a module in a different course; restore will validate it and drop if invalid.
 
