@@ -67,7 +67,7 @@ class mobile {
         $course = get_course($args->courseid);
 
         // If configured, ensure the current user is enrolled in the child course before showing the open button.
-        if ( $instance->autoenrol == 1 &&  $USER->id ==  $args->userid) {
+        if ($instance->autoenrol == 1 && $USER->id == $args->userid) {
             $enrolmanager = new enrol_manager();
             $enrolmanager->ensure_user_enrolled($instance, $cm, $course);
         }
