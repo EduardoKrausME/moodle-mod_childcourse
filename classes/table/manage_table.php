@@ -130,8 +130,8 @@ class manage_table extends table_sql {
         $completion = empty($row->lastsynccompletion) ? $never : userdate((int) $row->lastsynccompletion);
 
         $out = [];
-        $out[] = html_writer::div("<strong>".get_string("gradenoun").":</strong> " . $grade);
-        $out[] = html_writer::div("<strong>".get_string("coursecompletion").":</strong> " . $completion);
+        $out[] = html_writer::div("<strong>" . get_string("gradenoun") . ":</strong> " . $grade);
+        $out[] = html_writer::div("<strong>" . get_string("coursecompletion") . ":</strong> " . $completion);
 
         return html_writer::div(implode("", $out), "small text-muted");
     }
