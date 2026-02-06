@@ -328,7 +328,7 @@ class completion_sync {
     protected function get_changed_users_from_logs($instanceid, $childcourseid, $since, $cmid) {
         global $DB;
 
-        $sql  ="
+        $sql = "
             SELECT sl.userid, MAX(sl.timecreated) AS maxtime
               FROM {logstore_standard_log}  sl
               JOIN {childcourse_map}       map ON map.userid = sl.userid AND map.childcourseinstanceid = ?
