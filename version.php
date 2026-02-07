@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version = 2026020700;
+$plugin->version = 2026020701;
 $plugin->release = "1.1.3";
 $plugin->component = "mod_childcourse";
 $plugin->requires = 2022041900;
