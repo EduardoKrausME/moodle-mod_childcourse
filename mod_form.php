@@ -107,9 +107,9 @@ class mod_childcourse_mod_form extends moodleform_mod {
         }
 
         // JS for AJAX + rule field toggle.
-        $PAGE->requires->js_call_amd("childcourse/form", "init", []);
+        $PAGE->requires->js_call_amd("mod_childcourse/form", "init", []);
 
-        // Standard module elements (includes "Condições de conclusão" / Activity completion section).
+        // Standard module elements (includes "Completion conditions" / Activity completion section).
         $this->standard_coursemodule_elements();
 
         $this->add_action_buttons();
@@ -117,7 +117,7 @@ class mod_childcourse_mod_form extends moodleform_mod {
 
     /**
      * Adds custom completion rules.
-     * Moodle will display these inside the Activity completion section ("Condições de conclusão").
+     * Moodle will display these inside the Activity completion section ("Completion conditions").
      *
      * @return array Element names that are part of completion rules.
      * @throws coding_exception
