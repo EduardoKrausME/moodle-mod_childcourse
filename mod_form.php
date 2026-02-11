@@ -109,8 +109,35 @@ class mod_childcourse_mod_form extends moodleform_mod {
         // JS for AJAX + rule field toggle.
         $PAGE->requires->js_call_amd("mod_childcourse/form", "init", []);
 
+        // Grade Element.
+        $mform->addElement("header", "modstandardgrade", get_string("modgrade", "grades"));
+
+        $values = [
+            0 => get_string("grade_approval_no", "mod_childcourse"),
+            1 => get_string("grade_approval_yes", "mod_childcourse"),
+        ];
+        $mform->addElement("select", "grade_approval", get_string("grade_approval", "mod_childcourse"), $values);
+
+        global $COURSE;
+        $mform->addElement(
+            "select",
+            "gradecat",
+            get_string("gradecategoryonmodform", "grades"),
+            grade_get_categories_menu($COURSE->id, false)
+        );
+        $mform->addHelpButton("gradecat", "gradecategoryonmodform", "grades");
+        $mform->hideIf("gradecat", "grade_approval", "eq", "0");
+
+        $mform->addElement("text", "gradepass", get_string("gradepass", "grades"), ["size" => 4]);
+        $mform->addHelpButton("gradepass", "gradepass", "grades");
+        $mform->setType("gradepass", PARAM_INT);
+        $mform->hideIf("gradepass", "grade_approval", "eq", "0");
+
         // Standard module elements (includes "Completion conditions" / Activity completion section).
         $this->standard_coursemodule_elements();
+
+        $mform->hideIf("completionusegrade", "grade_approval", "eq", "0");
+        $mform->hideIf("completionpassgrade", "grade_approval", "eq", "0");
 
         $this->add_action_buttons();
     }

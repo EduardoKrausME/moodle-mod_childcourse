@@ -56,15 +56,14 @@ class grade_sync_task extends scheduled_task {
     public function execute() {
         global $DB;
 
-        $instances = $DB->get_records("childcourse");
+        $instances = $DB->get_records("childcourse", ["grade_approval" => 1]);
         if (!$instances) {
             return;
         }
 
         $gradesync = new grade_sync();
         foreach ($instances as $instance) {
-            $cm =
-                get_coursemodule_from_instance("childcourse", $instance->id, $instance->course);
+            $cm = get_coursemodule_from_instance("childcourse", $instance->id, $instance->course);
             if (!$cm) {
                 continue;
             }
