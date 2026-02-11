@@ -47,7 +47,7 @@ function childcourse_supports($feature) {
         case FEATURE_MOD_PURPOSE:
             return MOD_PURPOSE_CONTENT;
         case FEATURE_BACKUP_MOODLE2:
-            return true;
+            return false;
         case FEATURE_GROUPS:
             return true;
         case FEATURE_GROUPINGS:
