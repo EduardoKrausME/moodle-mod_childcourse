@@ -26,6 +26,7 @@ namespace mod_childcourse\privacy;
 
 use coding_exception;
 use context;
+use context_block;
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\contextlist;
@@ -51,7 +52,7 @@ class provider implements
      * @param collection $collection Collection.
      * @return collection Updated collection.
      */
-    public static function get_metadata(collection $collection) {
+    public static function get_metadata(collection $collection): collection {
         $collection->add_database_table("childcourse_map", [
             "childcourseinstanceid" => "privacy:metadata:childcourse_map:childcourseinstanceid",
             "parentcourseid" => "privacy:metadata:childcourse_map:parentcourseid",
@@ -91,9 +92,7 @@ class provider implements
      * @param int $userid User id.
      * @return contextlist Context list.
      */
-    public static function get_contexts_for_userid($userid) {
-        global $DB;
-
+    public static function get_contexts_for_userid(int $userid): contextlist {
         $list = new contextlist();
 
         $sql = "
@@ -107,7 +106,7 @@ class provider implements
              WHERE ctx.contextlevel = ?
                AND (map.id IS NOT NULL OR st.id IS NOT NULL)";
 
-        $list->add_from_sql($sql, [(int)$userid, (int)$userid, CONTEXT_MODULE]);
+        $list->add_from_sql($sql, [$userid, $userid, CONTEXT_MODULE]);
 
         return $list;
     }
@@ -120,10 +119,10 @@ class provider implements
      * @throws coding_exception
      * @throws dml_exception
      */
-    public static function export_user_data(approved_contextlist $contextlist) {
+    public static function export_user_data(approved_contextlist $contextlist): void {
         global $DB;
 
-        $userid = (int)$contextlist->get_user()->id;
+        $userid = $contextlist->get_user()->id;
 
         foreach ($contextlist->get_contexts() as $context) {
             $instance = self::get_instance_from_context($context);
@@ -132,29 +131,29 @@ class provider implements
             }
 
             $map = $DB->get_record("childcourse_map", [
-                "childcourseinstanceid" => (int)$instance->id,
+                "childcourseinstanceid" => $instance->id,
                 "userid" => $userid,
             ], "*", IGNORE_MISSING);
 
             $state = $DB->get_record("childcourse_state", [
-                "childcourseinstanceid" => (int)$instance->id,
+                "childcourseinstanceid" => $instance->id,
                 "userid" => $userid,
-            ], "*", IGNORE_MISSING);
+            ]);
 
             if (!$map && !$state) {
                 continue;
             }
 
-            $childfullname = $DB->get_field("course", "fullname", ["id" => (int)$instance->childcourseid]);
+            $childfullname = $DB->get_field("course", "fullname", ["id" => $instance->childcourseid]);
             $groups = [];
             if ($map && !empty($map->groupidsjson)) {
-                $groupids = json_decode((string)$map->groupidsjson, true);
+                $groupids = json_decode((string) $map->groupidsjson, true);
                 if (is_array($groupids) && $groupids) {
                     [$insql, $params] = $DB->get_in_or_equal(array_map("intval", $groupids), SQL_PARAMS_QM);
                     $grouprecords = $DB->get_records_sql("SELECT id, name FROM {groups} WHERE id $insql", $params);
                     foreach ($grouprecords as $g) {
                         $groups[] = [
-                            "id" => (int)$g->id,
+                            "id" => $g->id,
                             "name" => format_string($g->name, true),
                         ];
                     }
@@ -162,39 +161,39 @@ class provider implements
             }
 
             $pref = null;
-            if ($map && (int)$map->hiddenprefset === 1) {
-                $prefname = "block_myoverview_hidden_course_" . (int)$instance->childcourseid;
-                $pref = (string)get_user_preferences($prefname, "", $userid);
+            if ($map && $map->hiddenprefset === 1) {
+                $prefname = "block_myoverview_hidden_course_" . $instance->childcourseid;
+                $pref = (string) get_user_preferences($prefname, "", $userid);
             }
 
             $data = [
-                "parentcourseid" => (int)$instance->course,
-                "childcourseid" => (int)$instance->childcourseid,
-                "childcoursefullname" => format_string((string)$childfullname, true),
+                "parentcourseid" => $instance->course,
+                "childcourseid" => $instance->childcourseid,
+                "childcoursefullname" => format_string((string) $childfullname, true),
                 "mapping" => $map ? [
-                    "manualenrolid" => (int)$map->manualenrolid,
-                    "roleid" => (int)$map->roleid,
+                    "manualenrolid" => $map->manualenrolid,
+                    "roleid" => $map->roleid,
                     "groups" => $groups,
                     "hiddenprefname" =>
                         $map->hiddenprefset ?
-                        ("block_myoverview_hidden_course_" . (int)$instance->childcourseid) :
-                        null,
+                            ("block_myoverview_hidden_course_" . $instance->childcourseid) :
+                            null,
                     "hiddenprefvalue" => $pref,
-                    "timeenrolled" => (int)$map->timeenrolled,
-                    "timemodified" => (int)$map->timemodified,
+                    "timeenrolled" => $map->timeenrolled,
+                    "timemodified" => $map->timemodified,
                 ] : null,
                 "state" => $state ? [
                     "finalgrade" => $state->finalgrade,
-                    "gradeitemtimemodified" => (int)$state->gradeitemtimemodified,
-                    "grade_source" => (string)$state->grade_source,
-                    "coursecompleted" => (int)$state->coursecompleted,
-                    "coursecompletiontimemodified" => (int)$state->coursecompletiontimemodified,
-                    "timemodified" => (int)$state->timemodified,
+                    "gradeitemtimemodified" => $state->gradeitemtimemodified,
+                    "grade_source" => (string) $state->grade_source,
+                    "coursecompleted" => $state->coursecompleted,
+                    "coursecompletiontimemodified" => $state->coursecompletiontimemodified,
+                    "timemodified" => $state->timemodified,
                 ] : null,
             ];
 
             $subcontext = [get_string("pluginname", "childcourse"), format_string($instance->name, true)];
-            writer::with_context($context)->export_data($subcontext, (object)$data);
+            writer::with_context($context)->export_data($subcontext, (object) $data);
         }
     }
 
@@ -216,17 +215,17 @@ class provider implements
 
         // Remove any "My courses hidden" preferences set by this link.
         $maps = $DB->get_records("childcourse_map", [
-            "childcourseinstanceid" => (int)$instance->id,
+            "childcourseinstanceid" => $instance->id,
             "hiddenprefset" => 1,
         ], "id ASC", "id,userid");
 
         foreach ($maps as $map) {
-            $prefname = "block_myoverview_hidden_course_" . (int)$instance->childcourseid;
-            unset_user_preference($prefname, (int)$map->userid);
+            $prefname = "block_myoverview_hidden_course_" . $instance->childcourseid;
+            unset_user_preference($prefname, $map->userid);
         }
 
-        $DB->delete_records("childcourse_state", ["childcourseinstanceid" => (int)$instance->id]);
-        $DB->delete_records("childcourse_map", ["childcourseinstanceid" => (int)$instance->id]);
+        $DB->delete_records("childcourse_state", ["childcourseinstanceid" => $instance->id]);
+        $DB->delete_records("childcourse_map", ["childcourseinstanceid" => $instance->id]);
     }
 
     /**
@@ -237,10 +236,10 @@ class provider implements
      * @throws coding_exception
      * @throws dml_exception
      */
-    public static function delete_data_for_user(approved_contextlist $contextlist) {
+    public static function delete_data_for_user(approved_contextlist $contextlist): void {
         global $DB;
 
-        $userid = (int)$contextlist->get_user()->id;
+        $userid = $contextlist->get_user()->id;
 
         foreach ($contextlist->get_contexts() as $context) {
             $instance = self::get_instance_from_context($context);
@@ -249,22 +248,22 @@ class provider implements
             }
 
             $map = $DB->get_record("childcourse_map", [
-                "childcourseinstanceid" => (int)$instance->id,
+                "childcourseinstanceid" => $instance->id,
                 "userid" => $userid,
             ], "id,hiddenprefset", IGNORE_MISSING);
 
-            if ($map && (int)$map->hiddenprefset === 1) {
-                $prefname = "block_myoverview_hidden_course_" . (int)$instance->childcourseid;
+            if ($map && $map->hiddenprefset === 1) {
+                $prefname = "block_myoverview_hidden_course_" . $instance->childcourseid;
                 unset_user_preference($prefname, $userid);
             }
 
             $DB->delete_records("childcourse_state", [
-                "childcourseinstanceid" => (int)$instance->id,
+                "childcourseinstanceid" => $instance->id,
                 "userid" => $userid,
             ]);
 
             $DB->delete_records("childcourse_map", [
-                "childcourseinstanceid" => (int)$instance->id,
+                "childcourseinstanceid" => $instance->id,
                 "userid" => $userid,
             ]);
         }
@@ -277,22 +276,22 @@ class provider implements
      * @return stdClass|null Instance record or null.
      * @throws dml_exception
      */
-    protected static function get_instance_from_context(context $context) {
+    protected static function get_instance_from_context(context_block $context) {
         global $DB;
 
-        if ((int)$context->contextlevel !== CONTEXT_MODULE) {
+        if ($context->contextlevel !== CONTEXT_MODULE) {
             return null;
         }
 
-        $cmid = (int)$context->instanceid;
+        $cmid = $context->instanceid;
 
-        $record = $DB->get_record_sql("
+        $sql = "
             SELECT cc.*
               FROM {course_modules} cm
               JOIN {modules} m ON m.id = cm.module AND m.name = 'childcourse'
               JOIN {childcourse} cc ON cc.id = cm.instance
-             WHERE cm.id = ?
-        ", [$cmid]);
+             WHERE cm.id = ?";
+        $record = $DB->get_record_sql($sql, [$cmid]);
 
         return $record ?: null;
     }
