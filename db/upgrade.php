@@ -27,7 +27,25 @@
  *
  * @param int $oldversion Previous version.
  * @return bool True on success.
+ * @throws ddl_table_missing_exception
+ * @throws ddl_exception
  */
 function xmldb_childcourse_upgrade($oldversion) {
+    global $DB;
+
+    $dbman = $DB->get_manager();
+
+    // Add grade_approval column.
+    if ($oldversion < 2026021000) {
+        $table = new xmldb_table("childcourse");
+        $field = new xmldb_field("grade_approval", XMLDB_TYPE_INTEGER, "1", null, XMLDB_NOTNULL, null, "0", "completioncmid");
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_mod_savepoint(true, 2026021000, "childcourse");
+    }
+
     return true;
 }
