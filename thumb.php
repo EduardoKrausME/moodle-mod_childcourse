@@ -23,7 +23,18 @@
  */
 
 require_once(__DIR__ . "/../../config.php");
+
 $cmid = required_param("cmid", PARAM_INT);
+if (!$cmid) {
+    require_login();
+}
+
+$cache = cache::make("theme_eadtraining", "course_cache");
+$cachekey = "mod_childcourse_thumb_{$cmid}";
+if ($cache->has($cachekey)) {
+    $url = $cache->get($cachekey);
+    redirect($url);
+}
 
 $cm = get_coursemodule_from_id("childcourse", $cmid, 0, false, MUST_EXIST);
 $course = get_course($cm->course);
@@ -40,9 +51,12 @@ foreach ($course->get_course_overviewfiles() as $file) {
         $filename = $file->get_filename();
         $url = moodle_url::make_pluginfile_url($contextid, $component, $filearea, null, $filepath, $filename);
 
+        $cache->set($cachekey, $url);
         redirect($url);
     }
 }
 
 $url = $OUTPUT->get_generated_url_for_course(context_course::instance($course->id));
+
+$cache->set($cachekey, $url);
 redirect($url);
