@@ -99,7 +99,7 @@ class mod_childcourse_mod_form extends moodleform_mod {
 
         $mform->addElement("select", "hideinmycourses", get_string("hideinmycourses", "childcourse"), $options);
         $mform->addHelpButton("hideinmycourses", "hideinmycourses", "childcourse");
-        $mform->setDefault("hideinmycourses", 0);
+        $mform->setDefault("hideinmycourses", 1);
 
         $dependentes = [
             "opennewtab",
@@ -111,7 +111,7 @@ class mod_childcourse_mod_form extends moodleform_mod {
             "hideinmycourses",
         ];
         foreach ($dependentes as $campo) {
-            $mform->hideIf($campo, "childcourseid", "eq", 0);
+            $mform->hideIf($campo, "childcourseid", "eq", 1);
         }
 
         // JS for AJAX + rule field toggle.
