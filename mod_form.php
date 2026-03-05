@@ -38,9 +38,15 @@ class mod_childcourse_mod_form extends moodleform_mod {
      * @throws coding_exception
      */
     public function definition() {
-        global $PAGE;
+        global $PAGE, $CFG;
 
         $mform = $this->_form;
+
+        MoodleQuickForm::registerElementType(
+            "childcourse_select",
+            "{$CFG->dirroot}/mod/childcourse/classes/form/childcourse_select.php",
+            "mod_childcourse_form_childcourse_select"
+        );
 
         $mform->addElement("header", "general", get_string("general", "form"));
         $mform->addElement("text", "name", get_string("name"), ["size" => "64"]);
@@ -52,7 +58,9 @@ class mod_childcourse_mod_form extends moodleform_mod {
         // Child course settings (ONLY link/enrol/navigation/grade sync).
         $mform->addElement("header", "settings", get_string("settings_heading", "childcourse"));
 
-        $mform->addElement("select", "childcourseid", get_string("childcourse", "childcourse"), $this->get_course_options());
+        $mform->addElement("childcourse_select", "childcourseid",
+            get_string("childcourse", "childcourse"),
+            $this->get_course_options());
         $mform->addHelpButton("childcourseid", "childcourse", "childcourse");
         $mform->addRule("childcourseid", null, "required", null, "client");
 
@@ -232,20 +240,62 @@ class mod_childcourse_mod_form extends moodleform_mod {
      * @return array<int,string> Options.
      * @throws dml_exception
      */
+    /**
+     * Returns course options grouped by category (optgroups).
+     *
+     * @return array Options.
+     * @throws dml_exception
+     */
     protected function get_course_options() {
         global $DB;
 
         $sql = "
-            SELECT c.id, c.fullname
+            SELECT c.id,
+                   c.fullname,
+                   c.category,
+                   cc.name AS categoryname,
+                   cc.sortorder AS categorysort
               FROM {course} c
-             WHERE c.id      <> ?
-               AND c.visible  = 1
-          ORDER BY c.fullname ASC";
+              JOIN {course_categories} cc ON cc.id = c.category
+             WHERE c.id <> ?
+               AND c.visible = 1
+               AND cc.visible = 1
+          ORDER BY cc.sortorder ASC, c.sortorder ASC, c.fullname ASC";
+
         $records = $DB->get_records_sql($sql, [$this->get_course()->id]);
 
+        // Keep the first empty option (value 0) to preserve existing hideIf(... eq 0).
         $options = [0 => ""];
+
+        if (!$records) {
+            return $options;
+        }
+
+        // Category labels (includes nesting/indentation when available).
+        $categorieslist = \core_course_category::make_categories_list();
+
+        $grouped = [];
         foreach ($records as $c) {
-            $options[(int) $c->id] = format_string($c->fullname, true, ["context" => context_course::instance($c->id)]);
+            $courseid = (int) $c->id;
+            $catid = (int) $c->category;
+
+            $catlabel = $categorieslist[$catid]
+                ?? format_string($c->categoryname, true, ["context" => context_coursecat::instance($catid)]);
+
+            if (!isset($grouped[$catlabel])) {
+                $grouped[$catlabel] = [];
+            }
+
+            $grouped[$catlabel][$courseid] = format_string(
+                $c->fullname,
+                true,
+                ["context" => context_course::instance($courseid)]
+            );
+        }
+
+        // Convert grouped categories into optgroups for the select element.
+        foreach ($grouped as $catlabel => $courses) {
+            $options[$catlabel] = $courses;
         }
 
         return $options;
