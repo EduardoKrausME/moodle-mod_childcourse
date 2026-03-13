@@ -37,7 +37,8 @@ if ($cache->has($cachekey)) {
 }
 
 $cm = get_coursemodule_from_id("childcourse", $cmid, 0, false, MUST_EXIST);
-$course = get_course($cm->course);
+$childcourse = $DB->get_record("childcourse", ["id" => $cm->instance]);
+$course = get_course($childcourse->childcourseid);
 
 $course = new core_course_list_element($course);
 
