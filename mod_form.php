@@ -235,12 +235,6 @@ class mod_childcourse_mod_form extends moodleform_mod {
     }
 
     /**
-     * Returns course options for a simple select.
-     *
-     * @return array<int,string> Options.
-     * @throws dml_exception
-     */
-    /**
      * Returns course options grouped by category (optgroups).
      *
      * @return array Options.
