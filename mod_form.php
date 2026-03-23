@@ -58,9 +58,8 @@ class mod_childcourse_mod_form extends moodleform_mod {
         // Child course settings (ONLY link/enrol/navigation/grade sync).
         $mform->addElement("header", "settings", get_string("settings_heading", "childcourse"));
 
-        $mform->addElement("childcourse_select", "childcourseid",
-            get_string("childcourse", "childcourse"),
-            $this->get_course_options());
+        $label = get_string("childcourse", "childcourse");
+        $mform->addElement("childcourse_select", "childcourseid", $label, $this->get_course_options());
         $mform->addHelpButton("childcourseid", "childcourse", "childcourse");
         $mform->addRule("childcourseid", null, "required", null, "client");
 
@@ -180,11 +179,11 @@ class mod_childcourse_mod_form extends moodleform_mod {
      */
     public function completion_rule_enabled($data) {
         // Custom rules only make sense with automatic completion tracking.
-        if (empty($data["completion"]) || (int) $data["completion"] !== COMPLETION_TRACKING_AUTOMATIC) {
+        if (empty($data["completion"]) || $data["completion"] !== COMPLETION_TRACKING_AUTOMATIC) {
             return false;
         }
 
-        if (empty($data["completionrule"]) || $data["completionrule"] === "none") {
+        if (empty($data["completionrule"]) || $data["completionrule"] == "none") {
             return false;
         }
 
@@ -202,7 +201,7 @@ class mod_childcourse_mod_form extends moodleform_mod {
         $mform = $this->_form;
 
         if (!empty($this->current->instance)) {
-            $childcourseid = (int) ($this->current->childcourseid ?? 0);
+            $childcourseid = ($this->current->childcourseid ?? 0);
 
             // If instance was restored and childcourseid could not be mapped, allow selecting again.
             if ($childcourseid > 0 && $mform->elementExists("childcourseid")) {
@@ -266,12 +265,12 @@ class mod_childcourse_mod_form extends moodleform_mod {
         }
 
         // Category labels (includes nesting/indentation when available).
-        $categorieslist = \core_course_category::make_categories_list();
+        $categorieslist = core_course_category::make_categories_list();
 
         $grouped = [];
         foreach ($records as $c) {
-            $courseid = (int) $c->id;
-            $catid = (int) $c->category;
+            $courseid = $c->id;
+            $catid = $c->category;
 
             $catlabel = $categorieslist[$catid]
                 ?? format_string($c->categoryname, true, ["context" => context_coursecat::instance($catid)]);

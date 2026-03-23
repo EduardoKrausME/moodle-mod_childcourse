@@ -82,7 +82,7 @@ class manage_table extends table_sql {
      * @throws moodle_exception
      */
     public function col_name($row): string {
-        $cm = $this->get_cm_for_instance((int) $row->id);
+        $cm = $this->get_cm_for_instance($row->id);
         $name = format_string($row->name);
 
         if (!$cm) {
@@ -102,7 +102,7 @@ class manage_table extends table_sql {
      * @throws dml_exception
      */
     public function col_childcourse($row): string {
-        $childcourseid = (int) ($row->childcourseid ?? 0);
+        $childcourseid = ($row->childcourseid ?? 0);
         if (empty($childcourseid)) {
             return "-";
         }
@@ -126,8 +126,8 @@ class manage_table extends table_sql {
     public function col_sync($row): string {
         $never = get_string("never", "childcourse");
 
-        $grade = empty($row->lastsyncgrade) ? $never : userdate((int) $row->lastsyncgrade);
-        $completion = empty($row->lastsynccompletion) ? $never : userdate((int) $row->lastsynccompletion);
+        $grade = empty($row->lastsyncgrade) ? $never : userdate($row->lastsyncgrade);
+        $completion = empty($row->lastsynccompletion) ? $never : userdate($row->lastsynccompletion);
 
         $out = [];
         $out[] = html_writer::div("<strong>" . get_string("gradenoun") . ":</strong> " . $grade);
@@ -145,7 +145,7 @@ class manage_table extends table_sql {
      * @throws moodle_exception
      */
     public function col_actions($row): string {
-        $cm = $this->get_cm_for_instance((int) $row->id);
+        $cm = $this->get_cm_for_instance($row->id);
         if (!$cm) {
             return "";
         }

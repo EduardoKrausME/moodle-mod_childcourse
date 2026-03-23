@@ -53,7 +53,7 @@ if (empty($instances)) {
 $childcourseids = [];
 foreach ($instances as $instance) {
     if (!empty($instance->childcourseid)) {
-        $childcourseids[] = (int) $instance->childcourseid;
+        $childcourseids[] = $instance->childcourseid;
     }
 }
 $childcourseids = array_values(array_unique($childcourseids));
@@ -62,7 +62,7 @@ $childcoursesbyid = [];
 if (!empty($childcourseids)) {
     $childcourses = $DB->get_records_list("course", "id", $childcourseids, "", "id, fullname, visible");
     foreach ($childcourses as $c) {
-        $childcoursesbyid[(int) $c->id] = $c;
+        $childcoursesbyid[$c->id] = $c;
     }
 }
 
@@ -76,7 +76,7 @@ $table->head = [
 $table->data = [];
 
 foreach ($instances as $instance) {
-    $cmid = (int) $instance->coursemodule;
+    $cmid = $instance->coursemodule;
 
     $name = format_string($instance->name, true, ["context" => $coursecontext]);
     $namelink = html_writer::link(
@@ -85,7 +85,7 @@ foreach ($instances as $instance) {
     );
 
     $child = "";
-    $childid = (int) ($instance->childcourseid ?? 0);
+    $childid = ($instance->childcourseid ?? 0);
     if ($childid && isset($childcoursesbyid[$childid])) {
         $childcourse = $childcoursesbyid[$childid];
         $childname = format_string($childcourse->fullname, true, ["context" => context_course::instance($childcourse->id)]);

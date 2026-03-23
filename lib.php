@@ -107,7 +107,7 @@ function childcourse_update_instance($data, $mform) {
     $current = $DB->get_record("childcourse", ["id" => $data->id], "*", MUST_EXIST);
 
     // Child course is immutable after first save, except when restored with childcourseid=0.
-    if ((int)$current->childcourseid > 0 && (int)$current->childcourseid !== (int)$data->childcourseid) {
+    if ($current->childcourseid > 0 && $current->childcourseid !== $data->childcourseid) {
         throw new moodle_exception("lockedcoursewarning", "childcourse");
     }
 
@@ -214,7 +214,7 @@ function childcourse_update_grade_for_user($instance, $userid, $grade) {
 
     // Outcome grades are optional and will only be pushed when outcomes are enabled and mappable.
     $outcomesync = new outcome_sync();
-    $outcomesync->sync_user_outcomes($instance, (int)$userid, $grade);
+    $outcomesync->sync_user_outcomes($instance, $userid, $grade);
 }
 
 /**
@@ -232,7 +232,7 @@ function childcourse_update_grades($instance, $userid = 0, $nullifnone = true) {
 
     if ($userid && $nullifnone) {
         // If requested, insert a NULL grade to avoid "missing grade" in gradebook.
-        childcourse_update_grade_for_user($instance, (int)$userid, null);
+        childcourse_update_grade_for_user($instance, $userid, null);
     }
 }
 
@@ -264,17 +264,17 @@ function childcourse_get_coursemodule_info($coursemodule) {
 
     // Keep childcourseid available to the custom completion class without extra queries.
     $info->customdata = [
-        "childcourseid" => (int) $instance->childcourseid,
+        "childcourseid" => $instance->childcourseid,
     ];
 
     // Only expose the custom completion rule when completion is automatic and rule is enabled.
     $completion = $coursemodule->completion ?? 0;
-    if ((int) $completion === COMPLETION_TRACKING_AUTOMATIC && !empty($instance->completionrule) &&
+    if ($completion == COMPLETION_TRACKING_AUTOMATIC && !empty($instance->completionrule) &&
         $instance->completionrule !== "none") {
         $info->customdata["customcompletionrules"] = [
             // The *rule name* is "completionrule" (must match custom_completion::get_defined_custom_rules()).
             // The value is the selected mode ("coursecompleted" | "allactivities").
-            "completionrule" => (string) $instance->completionrule,
+            "completionrule" => $instance->completionrule,
         ];
     }
 
@@ -293,9 +293,9 @@ function childcourse_get_completion_active_rule_descriptions($cm): array {
         return [];
     }
 
-    $selected = (string) $cm->customdata["customcompletionrules"]["completionrule"];
+    $selected = $cm->customdata["customcompletionrules"]["completionrule"];
 
-    if ($selected === "allactivities") {
+    if ($selected == "allactivities") {
         return [get_string("completionrule_allactivities", "childcourse")];
     }
 

@@ -147,7 +147,7 @@ class provider implements
             $childfullname = $DB->get_field("course", "fullname", ["id" => $instance->childcourseid]);
             $groups = [];
             if ($map && !empty($map->groupidsjson)) {
-                $groupids = json_decode((string) $map->groupidsjson, true);
+                $groupids = json_decode($map->groupidsjson, true);
                 if (is_array($groupids) && $groupids) {
                     [$insql, $params] = $DB->get_in_or_equal(array_map("intval", $groupids), SQL_PARAMS_QM);
                     $grouprecords = $DB->get_records_sql("SELECT id, name FROM {groups} WHERE id $insql", $params);
@@ -161,15 +161,15 @@ class provider implements
             }
 
             $pref = null;
-            if ($map && $map->hiddenprefset === 1) {
+            if ($map && $map->hiddenprefset == 1) {
                 $prefname = "block_myoverview_hidden_course_" . $instance->childcourseid;
-                $pref = (string) get_user_preferences($prefname, "", $userid);
+                $pref = get_user_preferences($prefname, "", $userid);
             }
 
             $data = [
                 "parentcourseid" => $instance->course,
                 "childcourseid" => $instance->childcourseid,
-                "childcoursefullname" => format_string((string) $childfullname, true),
+                "childcoursefullname" => format_string($childfullname, true),
                 "mapping" => $map ? [
                     "manualenrolid" => $map->manualenrolid,
                     "roleid" => $map->roleid,
@@ -185,7 +185,7 @@ class provider implements
                 "state" => $state ? [
                     "finalgrade" => $state->finalgrade,
                     "gradeitemtimemodified" => $state->gradeitemtimemodified,
-                    "grade_source" => (string) $state->grade_source,
+                    "grade_source" => $state->grade_source,
                     "coursecompleted" => $state->coursecompleted,
                     "coursecompletiontimemodified" => $state->coursecompletiontimemodified,
                     "timemodified" => $state->timemodified,
@@ -252,7 +252,7 @@ class provider implements
                 "userid" => $userid,
             ], "id,hiddenprefset", IGNORE_MISSING);
 
-            if ($map && $map->hiddenprefset === 1) {
+            if ($map && $map->hiddenprefset == 1) {
                 $prefname = "block_myoverview_hidden_course_" . $instance->childcourseid;
                 unset_user_preference($prefname, $userid);
             }

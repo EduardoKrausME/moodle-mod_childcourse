@@ -101,7 +101,7 @@ class course_details extends external_api {
             "childcourse" => [
                 "id" => $childcourse->id,
                 "fullname" => format_string($childcourse->fullname),
-                "enablecompletion" => ($childcourse->enablecompletion === 1),
+                "enablecompletion" => ($childcourse->enablecompletion == 1),
             ],
             "groups" => $groupoptions,
             "gradebookconfigured" => $gradeok,

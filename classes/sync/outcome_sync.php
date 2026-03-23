@@ -53,24 +53,24 @@ class outcome_sync {
         }
 
         // Without a grade, we skip outcome updates (avoid accidental clearing).
-        if ($activitygrade === null) {
+        if ($activitygrade == null) {
             return;
         }
 
-        $items = $this->get_outcome_grade_items((int)$instance->id);
+        $items = $this->get_outcome_grade_items($instance->id);
         if (!$items) {
             return;
         }
 
         $data = [];
         foreach ($items as $item) {
-            $mapped = $this->map_percent_to_scale_value((float)$activitygrade, (int)$item->scaleid);
-            if ($mapped === null) {
+            $mapped = $this->map_percent_to_scale_value((float)$activitygrade, $item->scaleid);
+            if ($mapped == null) {
                 continue;
             }
 
             // The grade_update_outcomes expects: [itemnumber => outcomegrade].
-            $data[(int)$item->itemnumber] = $mapped;
+            $data[$item->itemnumber] = $mapped;
         }
 
         if (!$data) {
@@ -80,11 +80,11 @@ class outcome_sync {
         require_once("{$CFG->libdir}/gradelib.php");
         grade_update_outcomes(
             "mod/childcourse",
-            (int)$instance->course,
+            $instance->course,
             "mod",
             "childcourse",
-            (int)$instance->id,
-            (int)$userid,
+            $instance->id,
+            $userid,
             $data
         );
     }
@@ -127,12 +127,12 @@ class outcome_sync {
     protected function map_percent_to_scale_value($percent, $scaleid) {
         global $DB;
 
-        $scale = $DB->get_record("scale", ["id" => (int)$scaleid], "id,scale");
+        $scale = $DB->get_record("scale", ["id" => $scaleid], "id,scale");
         if (!$scale || empty($scale->scale)) {
             return null;
         }
 
-        $rawitems = array_map("trim", explode(",", (string)$scale->scale));
+        $rawitems = array_map("trim", explode(",", $scale->scale));
         $rawitems = array_values(array_filter($rawitems, function($v) {
             return $v !== "";
         }));
@@ -164,7 +164,7 @@ class outcome_sync {
 
         foreach ($numbers as $i => $value) {
             $dist = abs($value - $target);
-            if ($bestdist === null || $dist < $bestdist) {
+            if ($bestdist == null || $dist < $bestdist) {
                 $bestdist = $dist;
                 $bestindex = $i + 1; // 1-based for scale grades.
             }

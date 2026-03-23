@@ -44,11 +44,11 @@ $instance = $DB->get_record("childcourse", ["id" => $cm->instance], "*", MUST_EX
 
 $enrolmanager = new enrol_manager();
 
-if ($action === "open") {
+if ($action == "open") {
     $enrolmanager->redirect_enrolled($instance, $cm, $course);
 }
 
-if ($action === "sync") {
+if ($action == "sync") {
     require_sesskey();
     require_capability("mod/childcourse:sync", $context);
 
@@ -77,7 +77,7 @@ echo $OUTPUT->header();
 $childcourse = $DB->get_record("course", ["id" => $instance->childcourseid], "id,fullname,enablecompletion");
 
 $gradeok = grade_sync::child_course_has_course_total($instance->childcourseid);
-$completionok = !empty($childcourse) && $childcourse->enablecompletion === 1;
+$completionok = !empty($childcourse) && $childcourse->enablecompletion == 1;
 
 $openurl = new moodle_url("/mod/childcourse/view.php", ["id" => $cm->id, "action" => "open"]);
 $syncurl = new moodle_url("/mod/childcourse/view.php", ["id" => $cm->id, "action" => "sync", "sesskey" => sesskey()]);
@@ -91,9 +91,9 @@ if ($canaddinstance) {
         "childcourse_id" => $instance->childcourseid,
 
         "open_url" => $openurl,
-        "open_new_tab" => ($instance->opennewtab === 1),
+        "open_new_tab" => ($instance->opennewtab == 1),
 
-        "autoenrol" => ($instance->autoenrol === 1),
+        "autoenrol" => ($instance->autoenrol == 1),
 
         "can_sync" => $canmanagesync,
         "sync_url" => $syncurl,

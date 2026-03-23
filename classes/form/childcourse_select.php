@@ -44,7 +44,7 @@ class mod_childcourse_form_childcourse_select extends MoodleQuickForm_selectgrou
         // Always show Moodle's standard "Choose..." option as the first item (value 0).
         parent::__construct($elementname, $elementlabel, null, $attributes, true);
 
-        if ($optgrps === null) {
+        if ($optgrps == null) {
             return;
         }
 

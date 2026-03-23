@@ -61,7 +61,7 @@ class custom_completion extends activity_custom_completion {
         $selected = $this->get_selected_completionrule();
 
         // If something is off, keep a safe, generic description.
-        if ($selected === "allactivities") {
+        if ($selected == "allactivities") {
             return ["completionrule" => get_string("completionrule_allactivities", "childcourse")];
         }
 
@@ -97,7 +97,7 @@ class custom_completion extends activity_custom_completion {
 
         // Fast path: if core completion already says it's complete, keep it consistent.
         if (!empty($this->completionstate) && !empty($this->completionstate["completionstate"])) {
-            return (int) $this->completionstate["completionstate"];
+            return $this->completionstate["completionstate"];
         }
 
         $childcourseid = $this->get_childcourseid();
@@ -107,7 +107,7 @@ class custom_completion extends activity_custom_completion {
 
         $selected = $this->get_selected_completionrule();
 
-        if ($selected === "allactivities") {
+        if ($selected == "allactivities") {
             return $this->is_all_tracked_activities_completed($childcourseid, $this->userid)
                 ? COMPLETION_COMPLETE
                 : COMPLETION_INCOMPLETE;
@@ -130,7 +130,7 @@ class custom_completion extends activity_custom_completion {
         if (!empty($this->cm->customdata)
             && !empty($this->cm->customdata["customcompletionrules"])
             && !empty($this->cm->customdata["customcompletionrules"]["completionrule"])) {
-            return (string) $this->cm->customdata["customcompletionrules"]["completionrule"];
+            return $this->cm->customdata["customcompletionrules"]["completionrule"];
         }
 
         // Fallback: read from DB.
@@ -140,7 +140,7 @@ class custom_completion extends activity_custom_completion {
             return "coursecompleted";
         }
 
-        return (string) $rec->completionrule;
+        return $rec->completionrule;
     }
 
     /**
@@ -151,12 +151,12 @@ class custom_completion extends activity_custom_completion {
      */
     protected function get_childcourseid(): int {
         if (!empty($this->cm->customdata) && !empty($this->cm->customdata["childcourseid"])) {
-            return (int) $this->cm->customdata["childcourseid"];
+            return $this->cm->customdata["childcourseid"];
         }
 
         global $DB;
         $rec = $DB->get_record("childcourse", ["id" => $this->cm->instance], "id,childcourseid");
-        return $rec ? (int) $rec->childcourseid : 0;
+        return $rec ? $rec->childcourseid : 0;
     }
 
     /**

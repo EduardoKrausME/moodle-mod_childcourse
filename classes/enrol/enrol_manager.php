@@ -53,7 +53,7 @@ class enrol_manager {
     public function redirect_enrolled(stdClass $instance, stdClass $cm, stdClass $parentcourse) {
         global $PAGE;
 
-        if ($instance->autoenrol === 1) {
+        if ($instance->autoenrol == 1) {
             $this->ensure_user_enrolled($instance, $cm, $parentcourse);
         }
 
@@ -118,7 +118,7 @@ class enrol_manager {
         }
 
         $hiddenprefset = 0;
-        if ($instance->hideinmycourses === 1) {
+        if ($instance->hideinmycourses == 1) {
             $prefname = "block_myoverview_hidden_course_" . $childcourse->id;
             set_user_preference($prefname, 1, $USER->id);
             $hiddenprefset = 1;

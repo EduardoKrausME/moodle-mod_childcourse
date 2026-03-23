@@ -101,7 +101,7 @@ class grade_sync {
      * @return float|null Percent or null.
      */
     protected function normalize_to_percent($finalgrade, $grademax) {
-        if ($finalgrade === null) {
+        if ($finalgrade == null) {
             return null;
         }
 

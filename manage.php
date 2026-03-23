@@ -44,7 +44,7 @@ $cmsbyinstanceid = [];
 
 if (!empty($modinfo->instances["childcourse"])) {
     foreach ($modinfo->instances["childcourse"] as $instanceid => $cm) {
-        $cmsbyinstanceid[(int) $instanceid] = $cm;
+        $cmsbyinstanceid[$instanceid] = $cm;
     }
 }
 

@@ -47,7 +47,7 @@ class completion_sync {
     public function sync_instance_incremental(stdClass $instance, stdClass $cm) {
         global $DB;
 
-        if ($instance->completionrule === "none") {
+        if ($instance->completionrule == "none") {
             return;
         }
 
@@ -63,10 +63,10 @@ class completion_sync {
 
         $userchanges = [];
 
-        if ($instance->completionrule === "coursecompleted") {
+        if ($instance->completionrule == "coursecompleted") {
             $userchanges =
                 $this->get_changed_users_from_course_completion($instance->id, $instance->childcourseid, $since);
-        } else if ($instance->completionrule === "allactivities") {
+        } else if ($instance->completionrule == "allactivities") {
             $userchanges =
                 $this->get_changed_users_from_module_completion($instance->id, $instance->childcourseid, $since, []);
         }
@@ -107,11 +107,11 @@ class completion_sync {
      * @throws dml_exception
      */
     protected function evaluate_rule_for_user(stdClass $instance, $userid) {
-        if ($instance->completionrule === "coursecompleted") {
+        if ($instance->completionrule == "coursecompleted") {
             return $this->is_course_completed($instance->childcourseid, $userid);
         }
 
-        if ($instance->completionrule === "allactivities") {
+        if ($instance->completionrule == "allactivities") {
             return $this->is_all_tracked_activities_completed($instance->childcourseid, $userid);
         }
 
