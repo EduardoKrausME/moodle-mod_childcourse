@@ -28,8 +28,8 @@ $tasks = [
     [
         "classname" => '\mod_childcourse\task\grade_sync_task',
         "blocking" => 0,
+        "hour" => 3,
         "minute" => "R",
-        "hour" => 2,
         "day" => "*",
         "month" => "*",
         "dayofweek" => "*",
@@ -37,8 +37,17 @@ $tasks = [
     [
         "classname" => '\mod_childcourse\task\completion_sync_task',
         "blocking" => 0,
-        "minute" => "R",
         "hour" => 2,
+        "minute" => "R",
+        "day" => "*",
+        "month" => "*",
+        "dayofweek" => "*",
+    ],
+    [
+        "classname" => '\mod_childcourse\task\mycourses_visibility_sync_task',
+        "blocking" => 0,
+        "hour" => 3,
+        "minute" => "R",
         "day" => "*",
         "month" => "*",
         "dayofweek" => "*",
