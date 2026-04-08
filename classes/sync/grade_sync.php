@@ -59,13 +59,16 @@ class grade_sync {
 
         require_once("{$CFG->libdir}/gradelib.php");
 
+        $now = time();
         $courseitem = grade_item::fetch_course_item($instance->childcourseid);
         if (!$courseitem || empty($courseitem->id)) {
+            $DB->update_record("childcourse", (object) [
+                "id" => $instance->id,
+                "lastsyncgrade" => $now,
+            ]);
             return;
         }
-
         $since = $instance->lastsyncgrade;
-        $now = time();
 
         $sql = "
             SELECT gg.userid, gg.finalgrade, gg.timemodified

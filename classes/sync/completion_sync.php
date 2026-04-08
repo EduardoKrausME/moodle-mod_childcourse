@@ -47,19 +47,31 @@ class completion_sync {
     public function sync_instance_incremental(stdClass $instance, stdClass $cm) {
         global $DB;
 
-        if ($instance->completionrule == "none") {
+        $now = time();
+        $childcourse = $DB->get_record("course", ["id" => $instance->childcourseid], "id,enablecompletion");
+        if (!$childcourse || $childcourse->enablecompletion !== 1) {
             return;
         }
 
-        $childcourse = $DB->get_record("course", ["id" => $instance->childcourseid], "id,enablecompletion");
+        if ($instance->completionrule == "none") {
+            $DB->update_record("childcourse", (object) [
+                "id" => $instance->id,
+                "lastsynccompletion" => $now,
+            ]);
+            return;
+        }
+
         if (!$childcourse || $childcourse->enablecompletion !== 1) {
+            $DB->update_record("childcourse", (object) [
+                "id" => $instance->id,
+                "lastsynccompletion" => $now,
+            ]);
             return;
         }
 
         $parentcourse = $DB->get_record("course", ["id" => $instance->course], "*", MUST_EXIST);
 
         $since = $instance->lastsynccompletion;
-        $now = time();
 
         $userchanges = [];
 

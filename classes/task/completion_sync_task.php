@@ -56,7 +56,7 @@ class completion_sync_task extends scheduled_task {
     public function execute() {
         global $DB;
 
-        $instances = $DB->get_records("childcourse", ["grade_approval" => 1]);
+        $instances = $DB->get_records_select("childcourse", "completionrule <> :none", ["none" => "none"]);
         if (!$instances) {
             return;
         }
