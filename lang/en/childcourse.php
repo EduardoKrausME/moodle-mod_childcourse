@@ -28,6 +28,7 @@ $string['autoenrol'] = 'Auto-enrol on access';
 $string['autoenrol_help'] = 'If enabled, the plugin will automatically enrol the user in the child course when they open it through this activity. Enrolments are created using a dedicated Manual enrolment instance so they can be tracked and safely reverted later (depending on the removal policy). If disabled, the plugin will not attempt to enrol users automatically.';
 $string['childcourse'] = 'Child course';
 $string['childcourse:addinstance'] = 'Add a new child course activity';
+$string['childcourse:desc'] = '<div class="alert alert-warning">Once created, the child course cannot be edited because there are linked reference grades and enrollments associated with it. If you need to make any changes, delete it and create a new one.</div>';
 $string['childcourse:manage'] = 'Manage child course settings';
 $string['childcourse:sync'] = 'Sync child course grade and completion';
 $string['childcourse:view'] = 'View child course activity';

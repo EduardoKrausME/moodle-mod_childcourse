@@ -43,9 +43,9 @@ class mod_childcourse_mod_form extends moodleform_mod {
         $mform = $this->_form;
 
         MoodleQuickForm::registerElementType(
-            "childcourse_select",
-            "{$CFG->dirroot}/mod/childcourse/classes/form/childcourse_select.php",
-            "mod_childcourse_form_childcourse_select"
+            "categorycourse_select_element",
+            "{$CFG->dirroot}/mod/childcourse/classes/form/categorycourse_select_element.php",
+            "\\mod_childcourse\\form\\categorycourse_select_element"
         );
 
         $mform->addElement("header", "general", get_string("general", "form"));
@@ -59,9 +59,13 @@ class mod_childcourse_mod_form extends moodleform_mod {
         $mform->addElement("header", "settings", get_string("settings_heading", "childcourse"));
 
         $label = get_string("childcourse", "childcourse");
-        $mform->addElement("childcourse_select", "childcourseid", $label, $this->get_course_options());
+        $mform->addElement("categorycourse_select_element", "childcourseid", $label, $this->get_course_options());
         $mform->addHelpButton("childcourseid", "childcourse", "childcourse");
         $mform->addRule("childcourseid", null, "required", null, "client");
+
+        if (!empty($this->current->instance)) {
+            $mform->addElement("static", "childcourse_desc", "", get_string("childcourse:desc", "childcourse"));
+        }
 
         $options = [
             "1" => get_string("yes"),
