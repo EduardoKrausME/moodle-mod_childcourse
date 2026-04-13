@@ -33,7 +33,6 @@ use Exception;
 use HTML_QuickForm_element;
 use html_writer;
 use moodle_url;
-use MoodleQuickForm_Renderer;
 
 // phpcs:disable moodle.Files.MoodleInternal.MoodleInternalGlobalState
 // phpcs:disable Squiz.Scope.MethodScope.Missing
@@ -407,9 +406,14 @@ class categorycourse_select_element extends HTML_QuickForm_element implements te
                 continue;
             }
 
-            $parts = array_values(array_filter(array_map("trim", explode("/", (string) $categorylabel)), function(string $part): bool {
-                return $part !== "";
-            }));
+            $parts = array_values(
+                array_filter(
+                    array_map("trim", explode("/", (string) $categorylabel)),
+                    function(string $part): bool {
+                        return $part !== "";
+                    }
+                )
+            );
 
             if (empty($parts)) {
                 continue;
