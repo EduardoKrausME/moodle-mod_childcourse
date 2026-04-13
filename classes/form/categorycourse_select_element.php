@@ -584,9 +584,7 @@ class categorycourse_select_element extends HTML_QuickForm_element implements te
                     if (!control || !container) {
                         return;
                     }
-                
                     var radioes = Array.prototype.slice.call(container.querySelectorAll('input.academicdesk-course-radio'));
-                
                     var syncDisabledState = function() {
                         var disabled = !!control.disabled;
                         radioes.forEach(function(radio) {
@@ -601,12 +599,10 @@ class categorycourse_select_element extends HTML_QuickForm_element implements te
                             container.style.pointerEvents = '';
                         }
                     };
-                
                     if (typeof MutationObserver !== 'undefined') {
                         var observer = new MutationObserver(syncDisabledState);
                         observer.observe(control, {attributes: true, attributeFilter: ['disabled']});
                     }
-                
                     syncDisabledState();
                 })();
             </script>";
