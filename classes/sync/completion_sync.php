@@ -49,38 +49,34 @@ class completion_sync {
 
         $now = time();
         $childcourse = $DB->get_record("course", ["id" => $instance->childcourseid], "id,enablecompletion");
-        if (!$childcourse || $childcourse->enablecompletion !== 1) {
+        if (!$childcourse || (int) $childcourse->enablecompletion !== 1) {
+            $DB->update_record(
+                "childcourse", (object) [
+                "id" => $instance->id,
+                "lastsynccompletion" => $now,
+            ]
+            );
             return;
         }
 
+        $params = (object) [
+            "id" => $instance->id,
+            "lastsynccompletion" => $now,
+        ];
         if ($instance->completionrule == "none") {
-            $DB->update_record("childcourse", (object) [
-                "id" => $instance->id,
-                "lastsynccompletion" => $now,
-            ]);
-            return;
-        }
-
-        if (!$childcourse || $childcourse->enablecompletion !== 1) {
-            $DB->update_record("childcourse", (object) [
-                "id" => $instance->id,
-                "lastsynccompletion" => $now,
-            ]);
+            $DB->update_record("childcourse", $params);
             return;
         }
 
         $parentcourse = $DB->get_record("course", ["id" => $instance->course], "*", MUST_EXIST);
-
-        $since = $instance->lastsynccompletion;
+        $since = (int) $instance->lastsynccompletion;
 
         $userchanges = [];
 
         if ($instance->completionrule == "coursecompleted") {
-            $userchanges =
-                $this->get_changed_users_from_course_completion($instance->id, $instance->childcourseid, $since);
+            $userchanges = $this->get_changed_users_from_course_completion($instance->id, $instance->childcourseid, $since);
         } else if ($instance->completionrule == "allactivities") {
-            $userchanges =
-                $this->get_changed_users_from_module_completion($instance->id, $instance->childcourseid, $since, []);
+            $userchanges = $this->get_changed_users_from_module_completion($instance->id, $instance->childcourseid, $since, []);
         }
 
         if (!$userchanges) {
@@ -268,11 +264,13 @@ class completion_sync {
         global $DB;
 
         $sql = "
-            SELECT cc.userid, MAX(cc.timemodified) AS maxtime
-              FROM {course_completions}  cc
-              JOIN {childcourse_map}    map ON map.userid = cc.userid AND map.childcourseinstanceid = ?
+            SELECT cc.userid, MAX(cc.timecompleted) AS maxtime
+              FROM {course_completions} cc
+              JOIN {childcourse_map} map
+                ON map.userid = cc.userid
+               AND map.childcourseinstanceid = ?
              WHERE cc.course = ?
-               AND cc.timemodified > ?
+               AND cc.timecompleted > ?
                AND cc.timecompleted IS NOT NULL
           GROUP BY cc.userid";
         $records = $DB->get_records_sql($sql, [$instanceid, $childcourseid, $since]);

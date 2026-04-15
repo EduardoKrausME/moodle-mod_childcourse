@@ -170,6 +170,13 @@ class manage_table extends table_sql {
             ["class" => "btn btn-sm btn-outline-secondary me-1"]
         );
 
+        $reporturl = new moodle_url("/mod/childcourse/report.php", ["id" => $cm->id]);
+        $buttons[] = html_writer::link(
+            $reporturl,
+            get_string("reporttitle", "childcourse"),
+            ["class" => "btn btn-sm btn-outline-info me-1"]
+        );
+
         $editurl = new moodle_url("/course/modedit.php", ["update" => $cm->id, "return" => 1]);
         $buttons[] = html_writer::link(
             $editurl,

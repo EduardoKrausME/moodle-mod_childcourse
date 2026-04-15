@@ -96,6 +96,7 @@ if ($canaddinstance) {
 
         "can_sync" => $canmanagesync,
         "sync_url" => $syncurl,
+        "report_url" => new moodle_url("/mod/childcourse/report.php", ["id" => $cm->id]),
 
         "lastsync_grade" => empty($instance->lastsyncgrade)
             ? get_string("never", "childcourse")
