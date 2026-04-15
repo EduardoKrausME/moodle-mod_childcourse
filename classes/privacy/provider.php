@@ -130,10 +130,7 @@ class provider implements
                 continue;
             }
 
-            $map = $DB->get_record("childcourse_map", [
-                "childcourseinstanceid" => $instance->id,
-                "userid" => $userid,
-            ], "*", IGNORE_MISSING);
+            $map = $DB->get_record("childcourse_map", ["childcourseinstanceid" => $instance->id, "userid" => $userid]);
 
             $state = $DB->get_record("childcourse_state", [
                 "childcourseinstanceid" => $instance->id,
