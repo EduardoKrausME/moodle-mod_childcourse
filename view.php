@@ -25,6 +25,7 @@
 use mod_childcourse\enrol\enrol_manager;
 use mod_childcourse\sync\completion_sync;
 use mod_childcourse\sync\grade_sync;
+use mod_childcourse\table\report_table;
 
 require_once(__DIR__ . "/../../config.php");
 
@@ -54,7 +55,7 @@ if ($action == "sync") {
     $gradesync = new grade_sync();
     $compsync = new completion_sync();
 
-    $gradesync->sync_instance_incremental($instance);
+    $gradesync->sync_instance_full($instance);
     $compsync->sync_instance_incremental($instance, $cm);
 
     redirect(new moodle_url("/mod/childcourse/view.php", ["id" => $cm->id]), get_string("syncdone", "childcourse"), 1);
@@ -111,7 +112,45 @@ if ($canaddinstance) {
         "grade_warning" => get_string("gradebookmissing", "childcourse"),
         "completion_warning" => get_string("completionmissing", "childcourse"),
     ];
+
+    echo '<div class="container-fluid">';
     echo $OUTPUT->render_from_template("childcourse/view", $mustachecontext);
+
+    echo '<div class="card shadow-sm mb-3">';
+    echo '<div class="card-body">';
+    echo html_writer::tag("h3", get_string("reporttitle", "childcourse"), ["class" => "mb-2"]);
+    $table = new report_table(
+        "mod_childcourse_report_{$instance->id}",
+        $PAGE->url,
+        $instance,
+        $cm,
+        $course,
+        $childcourse
+    );
+    $table->set_sql(
+        "m.id,
+     u.id AS userid,
+     u.firstname,
+     u.lastname,
+     u.email,
+     cs.finalgrade AS syncedremotecache,
+     cs.coursecompleted AS syncedcompletioncache,
+     cs.timemodified AS cachetimemodified",
+        "{childcourse_map} m
+LEFT JOIN {user} u ON u.id = m.userid
+LEFT JOIN {childcourse_state} cs
+       ON cs.childcourseinstanceid = m.childcourseinstanceid
+      AND cs.userid = m.userid",
+        "m.childcourseinstanceid = ?",
+        [$instance->id]
+    );
+    $table->sortable(true, "firstname", SORT_ASC);
+    $table->pageable(true);
+    $table->out(30, true);
+
+    echo '</div>';
+    echo '</div>';
+    echo '</div>';
 }
 
 echo $OUTPUT->footer();

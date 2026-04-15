@@ -36,55 +36,52 @@
     }
 }}
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow-sm mb-3">
-                <div class="card-body">
-                    <h3 class="mb-2">{{{name}}}</h3>
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm mb-3">
+            <div class="card-body">
+                <h3 class="mb-2">{{{name}}}</h3>
 
-                    {{#intro}}
-                        <div class="mb-3">
-                            {{{intro}}}
-                        </div>
-                    {{/intro}}
-
-                    <div class="d-flex flex-wrap gap-2 align-items-center">
-                        <a class="btn btn-primary"
-                           href="{{{open_url}}}"
-                           {{#open_new_tab}}target="_blank" rel="noopener"{{/open_new_tab}}>
-                            {{#str}}openchildcourse, childcourse{{/str}}
-                        </a>
-
-                        {{#can_sync}}
-                            <a class="btn btn-outline-secondary" href="{{{sync_url}}}">
-                                {{#str}}syncnow, childcourse{{/str}}
-                            </a>
-                        {{/can_sync}}
-
-                        <a class="btn btn-outline-info" href="{{{report_url}}}">
-                            {{#str}}reporttitle, childcourse{{/str}}
-                        </a>
+                {{#intro}}
+                    <div class="mb-3">
+                        {{{intro}}}
                     </div>
+                {{/intro}}
 
-                    <div class="mt-3 small text-muted">
-                        <div><strong>{{#str}}label_childcourse, childcourse{{/str}}:</strong> {{{childcourse_name}}} (ID: {{{childcourse_id}}})</div>
-                        <div><strong>{{#str}}label_lastsyncgrade, childcourse{{/str}}:</strong> {{{lastsync_grade}}}</div>
-                        <div><strong>{{#str}}label_lastsynccompletion, childcourse{{/str}}:</strong> {{{lastsync_completion}}}</div>
-                    </div>
+                <div class="d-flex flex-wrap gap-2 align-items-center">
+                    <a class="btn btn-primary"
+                       href="{{{open_url}}}"
+                        {{#open_new_tab}}target="_blank" rel="noopener"{{/open_new_tab}}>
+                        {{#str}}openchildcourse, childcourse{{/str}}
+                    </a>
 
-                    {{^grade_ok}}
-                        <div class="alert alert-warning mt-3 mb-0">
-                            {{{grade_warning}}}
-                        </div>
-                    {{/grade_ok}}
-
-                    {{^completion_ok}}
-                        <div class="alert alert-warning mt-3 mb-0">
-                            {{{completion_warning}}}
-                        </div>
-                    {{/completion_ok}}
+                    {{#can_sync}}
+                        <a class="btn btn-outline-secondary" href="{{{sync_url}}}">
+                            {{#str}}syncnow, childcourse{{/str}}
+                        </a>
+                    {{/can_sync}}
                 </div>
+
+                <div class="mt-3 small text-muted">
+                    <div><strong>{{#str}}label_childcourse, childcourse{{/str}}:</strong> {{{childcourse_name}}}
+                        (ID: {{{childcourse_id}}})
+                    </div>
+                    <div><strong>{{#str}}label_lastsyncgrade, childcourse{{/str}}:</strong> {{{lastsync_grade}}}</div>
+                    <div><strong>{{#str}}
+                        label_lastsynccompletion, childcourse{{/str}}:</strong> {{{lastsync_completion}}}</div>
+                </div>
+
+                {{^grade_ok}}
+                    <div class="alert alert-warning mt-3 mb-0">
+                        {{{grade_warning}}}
+                    </div>
+                {{/grade_ok}}
+
+                {{^completion_ok}}
+                    <div class="alert alert-warning mt-3 mb-0">
+                        {{{completion_warning}}}
+                    </div>
+                {{/completion_ok}}
             </div>
         </div>
     </div>
