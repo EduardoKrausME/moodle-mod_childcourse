@@ -23,7 +23,6 @@
  */
 
 use mod_childcourse\enrol\enrol_manager;
-use mod_childcourse\output\view_page;
 use mod_childcourse\sync\completion_sync;
 use mod_childcourse\sync\grade_sync;
 
