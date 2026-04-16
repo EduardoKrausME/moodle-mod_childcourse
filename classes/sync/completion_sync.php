@@ -50,12 +50,11 @@ class completion_sync {
         $now = time();
         $childcourse = $DB->get_record("course", ["id" => $instance->childcourseid], "id,enablecompletion");
         if (!$childcourse || (int) $childcourse->enablecompletion !== 1) {
-            $DB->update_record(
-                "childcourse", (object) [
+            $params = (object) [
                 "id" => $instance->id,
                 "lastsynccompletion" => $now,
-            ]
-            );
+            ];
+            $DB->update_record("childcourse", $params);
             return;
         }
 
