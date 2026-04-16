@@ -125,7 +125,12 @@ class report_table extends table_sql {
             get_string("report_completionstatus", "childcourse"),
         ]);
 
-        $this->no_sorting("activitygrade", "remotegrade", "gradestatus", "activitycompletion", "remotecompletion", "completionstatus");
+        $this->no_sorting("activitygrade");
+        $this->no_sorting("remotegrade");
+        $this->no_sorting("gradestatus");
+        $this->no_sorting("activitycompletion");
+        $this->no_sorting("remotecompletion");
+        $this->no_sorting("completionstatus");
         $this->set_attribute("class", "generaltable table-striped table-sm");
     }
 
