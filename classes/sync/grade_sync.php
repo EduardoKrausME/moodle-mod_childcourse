@@ -165,4 +165,46 @@ class grade_sync {
 
         $DB->update_record("childcourse_state", $state);
     }
+
+    /**
+     * Fully syncs all child course grades to the parent activity grade.
+     *
+     * This is intended for manual "Sync now" actions and backfills users whose
+     * child course grade was created before the last incremental checkpoint.
+     *
+     * @param stdClass $instance Instance record.
+     * @return void
+     * @throws dml_exception
+     */
+    public function sync_instance_full(stdClass $instance) {
+        global $DB, $CFG;
+
+        require_once("{$CFG->libdir}/gradelib.php");
+
+        $now = time();
+        $courseitem = grade_item::fetch_course_item($instance->childcourseid);
+        if (!$courseitem || empty($courseitem->id)) {
+            $DB->update_record("childcourse", (object) [
+                "id" => $instance->id,
+                "lastsyncgrade" => $now,
+            ]);
+            return;
+        }
+
+        $sql = "
+            SELECT gg.userid, gg.finalgrade, gg.timemodified
+              FROM {grade_grades} gg
+             WHERE gg.itemid = ?
+          ORDER BY gg.timemodified ASC";
+        $gradegrades = $DB->get_records_sql($sql, [$courseitem->id]);
+
+        foreach ($gradegrades as $gradegrade) {
+            $percent = $this->normalize_to_percent($gradegrade->finalgrade, $courseitem->grademax);
+            childcourse_update_grade_for_user($instance, $gradegrade->userid, $percent);
+            $this->upsert_state_grade($instance->id, $gradegrade->userid, $percent, $gradegrade->timemodified);
+        }
+
+        $instance->lastsyncgrade = $now;
+        $DB->update_record("childcourse", $instance);
+    }
 }

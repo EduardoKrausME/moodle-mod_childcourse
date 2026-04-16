@@ -207,6 +207,7 @@ function childcourse_update_grade_for_user($instance, $userid, $grade) {
     $grades = [
         $userid => [
             "rawgrade" => $grade,
+            "userid" => $userid,
         ],
     ];
 
