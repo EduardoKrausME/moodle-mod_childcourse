@@ -33,4 +33,14 @@ $functions = [
         "ajax" => true,
         "loginrequired" => true,
     ],
+    "mod_childcourse_mobile" => [
+        "classname" => "mod_childcourse\\external\\mobile",
+        "methodname" => "mobile",
+        "classpath" => "mod/childcourse/classes/external/mobile.php",
+        "description" => "Returns the child course id and prepares mobile access.",
+        "type" => "read",
+        "ajax" => true,
+        "loginrequired" => true,
+        "services" => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+    ],
 ];
