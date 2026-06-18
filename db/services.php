@@ -35,7 +35,7 @@ $functions = [
     ],
     "mod_childcourse_mobile" => [
         "classname" => "mod_childcourse\\external\\mobile",
-        "methodname" => "mobile",
+        "methodname" => "datamobile",
         "classpath" => "mod/childcourse/classes/external/mobile.php",
         "description" => "Returns the child course id and prepares mobile access.",
         "type" => "read",

@@ -50,7 +50,7 @@ class mobile extends external_api {
      *
      * @return external_function_parameters
      */
-    public static function mobile_parameters(): external_function_parameters {
+    public static function datamobile_parameters(): external_function_parameters {
         return new external_function_parameters([
             "instanceid" => new external_value(PARAM_INT, "Childcourse instance id"),
         ]);
@@ -63,7 +63,7 @@ class mobile extends external_api {
      * @return array
      * @throws moodle_exception
      */
-    public static function mobile(int $instanceid): array {
+    public static function datamobile(int $instanceid): array {
         global $DB;
 
         $params = self::validate_parameters(self::mobile_parameters(), [
@@ -126,7 +126,7 @@ class mobile extends external_api {
      *
      * @return external_single_structure
      */
-    public static function mobile_returns(): external_single_structure {
+    public static function datamobile_returns(): external_single_structure {
         return new external_single_structure([
             "refcourse" => new external_value(PARAM_INT, "Child course id"),
             "childcourseid" => new external_value(PARAM_INT, "Child course id"),
