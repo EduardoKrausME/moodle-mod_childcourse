@@ -1,0 +1,23 @@
+# (RFC §4.1). Authors update their listing with an ordinary commit; camp
+# ingests and hash-pins it at each tagged release. Listing for mod_childcourse.
+
+name: "Child Course"
+summary: "Organize related courses and present access to child courses as an activity."
+description: |
+  Organize related courses and present access to child courses as an activity.
+
+  mod_childcourse adds a Moodle activity that works as a shortcut inside a parent course . When clicked, the user is redirected to a child course and (optionally) the plugin performs automatic enrolment , group mapping, and incremental synchronization of completion and grades .
+
+  Key capabilities:
+  - Supports Backup/Restore .
+  - Can hide the child course from "My courses / Overview" to reduce clutter.
+  - On delete, choose whether to unenrol link-enrolled users or keep enrolments.
+
+  Supported Moodle versions in the supplied plugin list: 3.9 - 5.0.
+
+labels:
+  - fully-free
+category: "administration"
+links:
+  docs: https://github.com/EduardoKrausME/moodle-mod_childcourse#readme
+  issues: https://github.com/EduardoKrausME/moodle-mod_childcourse/issues
