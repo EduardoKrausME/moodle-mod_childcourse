@@ -209,7 +209,7 @@ class custom_completion extends activity_custom_completion {
              WHERE cm.course     = ?
                AND cm.completion > 0
                AND cmc.userid    = ?
-               AND (cmc.completionstate > 0 OR cmv.viewed = ?)";
+               AND (cmc.completionstate > 0 OR cmv.useried = ?)";
         $completed = $DB->count_records_sql($sql, [$childcourseid, $userid, $userid]);
 
         return $completed >= $total;
