@@ -66,7 +66,7 @@ class mobile extends external_api {
     public static function datamobile(int $instanceid): array {
         global $DB;
 
-        $params = self::validate_parameters(self::mobile_parameters(), [
+        $params = self::validate_parameters(self::datamobile_parameters(), [
             "instanceid" => $instanceid,
         ]);
 
