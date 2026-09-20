@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/childcourse/db" VERSION="2026020501" COMMENT="childcourse tables"
+<XMLDB PATH="mod/childcourse/db" VERSION="20260205" COMMENT="childcourse tables"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
 
