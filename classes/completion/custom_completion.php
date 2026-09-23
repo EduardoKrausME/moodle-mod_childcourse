@@ -205,11 +205,12 @@ class custom_completion extends activity_custom_completion {
             SELECT COUNT(1)
               FROM {course_modules_completion} cmc
               JOIN {course_modules}             cm ON cm.id = cmc.coursemoduleid
+              JOIN {course_modules_viewed} cmv ON cm.id = cmv.coursemoduleid
              WHERE cm.course     = ?
                AND cm.completion > 0
                AND cmc.userid    = ?
-               AND (cmc.completionstate > 0 OR cmc.viewed = 1)";
-        $completed = $DB->count_records_sql($sql, [$childcourseid, $userid]);
+               AND (cmc.completionstate > 0 OR cmv.userid = ?)";
+        $completed = $DB->count_records_sql($sql, [$childcourseid, $userid, $userid]);
 
         return $completed >= $total;
     }
