@@ -38,6 +38,8 @@ use moodle_exception;
 use required_capability_exception;
 
 // phpcs:disable moodle.Files.MoodleInternal.MoodleInternalGlobalState
+defined('MOODLE_INTERNAL') || die;
+
 require_once("{$CFG->libdir}/externallib.php");
 
 /**

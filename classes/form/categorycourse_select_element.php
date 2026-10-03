@@ -38,6 +38,8 @@ use moodle_url;
 // phpcs:disable Squiz.Scope.MethodScope.Missing
 // phpcs:disable moodle.NamingConventions.ValidFunctionName.LowercaseMethod
 global $CFG;
+defined('MOODLE_INTERNAL') || die;
+
 require_once("{$CFG->libdir}/pear/HTML/QuickForm/element.php");
 
 /**
