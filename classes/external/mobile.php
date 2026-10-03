@@ -35,7 +35,7 @@ use mod_childcourse\enrol\enrol_manager;
 use mod_childcourse\event\course_module_viewed;
 use moodle_exception;
 
-defined('MOODLE_INTERNAL') || die();
+defined('MOODLE_INTERNAL') || die;
 
 require_once("{$CFG->libdir}/externallib.php");
 require_once("{$CFG->libdir}/completionlib.php");
