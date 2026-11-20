@@ -52,15 +52,15 @@ In the Moodle App, the activity shows **only a button** to open the child course
 
 ## Plugin pages
 
-* `view.php` — main activity page (student is redirected; teacher sees a dashboard)
-* `manage.php` — lists/manages instances in the course (requires `moodle/course:update`)
-* `index.php` — lists module instances in the course
+* `view.php` - main activity page (student is redirected; teacher sees a dashboard)
+* `manage.php` - lists/manages instances in the course (requires `moodle/course:update`)
+* `index.php` - lists module instances in the course
 
 ## Data structure (tables)
 
-* `{childcourse}` — instance settings (includes completion rules and sync timestamps)
-* `{childcourse_map}` — tracks enrolments/groups created per instance and user
-* `{childcourse_state}` — state cache for incremental synchronization (grades/completion)
+* `{childcourse}` - instance settings (includes completion rules and sync timestamps)
+* `{childcourse_map}` - tracks enrolments/groups created per instance and user
+* `{childcourse_state}` - state cache for incremental synchronization (grades/completion)
 
 ## Support
 
